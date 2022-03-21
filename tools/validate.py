@@ -23,6 +23,11 @@ from torch.utils.tensorboard import SummaryWriter
 from pathlib import Path
 import numpy as np
 
+from prettytable import PrettyTable
+# from pthflops import count_ops
+from ptflops import get_model_complexity_info
+# from fvcore.nn import FlopCountAnalysis
+# from fvcore.nn import flop_count_table
 
 def single_gpu_test(model, data_loader, show=False, save_img=False, save_img_dir=''):
     model.eval()
@@ -134,12 +139,24 @@ def parse_args():
     parser.add_argument('--local_rank', type=int, default=0)
     parser.add_argument('--mean_teacher', action='store_true', help='test the mean teacher pth')
     parser.add_argument('--ecp', action='store_true', help='use ECP params')
+    parser.add_argument('--count_params', action='store_true',  help='print the number of parameters')
 
     args = parser.parse_args()
     if 'LOCAL_RANK' not in os.environ:
         os.environ['LOCAL_RANK'] = str(args.local_rank)
     return args
 
+def count_parameters(model):
+    table = PrettyTable(["Modules", "Parameters"])
+    total_params = 0
+    for name, parameter in model.named_parameters():
+        if not parameter.requires_grad: continue
+        params = parameter.numel()
+        table.add_row([name, params])
+        total_params+=params
+    print(table)
+    print(f"Total Trainable Params: {total_params}")
+    return total_params
 
 def main():
     args = parse_args()
@@ -179,6 +196,20 @@ def main():
 
         # build the model and load checkpoint
         model = build_detector(cfg.model, train_cfg=None, test_cfg=cfg.test_cfg)
+        if args.count_params:
+            count_parameters(model)
+        
+        # macs, params = get_model_complexity_info(model, (3, 2048, 1024), as_strings=True,
+        #                                    print_per_layer_stat=True, verbose=True)
+        # print('{:<30}  {:<8}'.format('Computational complexity: ', macs))
+        # print('{:<30}  {:<8}'.format('Number of parameters: ', params))
+        
+        # inp = torch.rand(1,3,224,224)
+        # flops = FlopCountAnalysis(model, inp)
+        # print("Flops",flops.total())
+        # print(flop_count_table(flops))
+        # count_ops(model, inp)
+        
         fp16_cfg = cfg.get('fp16', None)
 
         test_json = cfg.data.test.get("ann_file", "")
