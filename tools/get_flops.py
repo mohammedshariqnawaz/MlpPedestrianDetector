@@ -515,9 +515,9 @@ def get_modules_mapping():
         # convolutions
         nn.Conv1d: conv_flops_counter_hook,
         nn.Conv2d: conv_flops_counter_hook,
-        mmcv.cnn.bricks.Conv2d: conv_flops_counter_hook,
+        # mmcv.cnn.bricks.Conv2d: conv_flops_counter_hook,
         nn.Conv3d: conv_flops_counter_hook,
-        mmcv.cnn.bricks.Conv3d: conv_flops_counter_hook,
+        # mmcv.cnn.bricks.Conv3d: conv_flops_counter_hook,
         # activations
         nn.ReLU: relu_flops_counter_hook,
         nn.PReLU: relu_flops_counter_hook,
@@ -529,9 +529,9 @@ def get_modules_mapping():
         nn.AvgPool1d: pool_flops_counter_hook,
         nn.AvgPool2d: pool_flops_counter_hook,
         nn.MaxPool2d: pool_flops_counter_hook,
-        mmcv.cnn.bricks.MaxPool2d: pool_flops_counter_hook,
+        # mmcv.cnn.bricks.MaxPool2d: pool_flops_counter_hook,
         nn.MaxPool3d: pool_flops_counter_hook,
-        mmcv.cnn.bricks.MaxPool3d: pool_flops_counter_hook,
+        # mmcv.cnn.bricks.MaxPool3d: pool_flops_counter_hook,
         nn.AvgPool3d: pool_flops_counter_hook,
         nn.AdaptiveMaxPool1d: pool_flops_counter_hook,
         nn.AdaptiveAvgPool1d: pool_flops_counter_hook,
@@ -550,12 +550,12 @@ def get_modules_mapping():
         nn.LayerNorm: norm_flops_counter_hook,
         # FC
         nn.Linear: linear_flops_counter_hook,
-        mmcv.cnn.bricks.Linear: linear_flops_counter_hook,
+        # mmcv.cnn.bricks.Linear: linear_flops_counter_hook,
         # Upscale
         nn.Upsample: upsample_flops_counter_hook,
         # Deconvolution
         nn.ConvTranspose2d: deconv_flops_counter_hook,
-        mmcv.cnn.bricks.ConvTranspose2d: deconv_flops_counter_hook,
+        # mmcv.cnn.bricks.ConvTranspose2d: deconv_flops_counter_hook,
     }
 
 def parse_args():
@@ -617,13 +617,12 @@ def main():
         model.cuda()
     model.eval()
 
-    print(dir(model))
-    if hasattr(model, 'forward'):
-        model.forward = model.forward
-    else:
-        raise NotImplementedError(
-            'FLOPs counter is currently not currently supported with {}'.
-            format(model.__class__.__name__))
+    # if hasattr(model, 'forward_dummy'):
+    #     model.forward = model.forward_dummy
+    # else:
+    #     raise NotImplementedError(
+    #         'FLOPs counter is currently not currently supported with {}'.
+    #         format(model.__class__.__name__))
 
     flops, params = get_model_complexity_info(model, input_shape)
     split_line = '=' * 30

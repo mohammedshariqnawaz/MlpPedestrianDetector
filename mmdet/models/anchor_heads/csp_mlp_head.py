@@ -42,6 +42,14 @@ class CSPMLPHead(CSPHead):
         self.reg_scales = nn.ModuleList([Scale(1.0) for _ in self.strides])
         self.offset_scales = nn.ModuleList([Scale(1.0) for _ in self.strides])
 
+    def forward_dummy(self, img):
+        """Used for computing network flops.
+
+        See `mmdetection/tools/analysis_tools/get_flops.py`
+        """
+        raise NotImplementedError(
+            f'`forward_dummy` is not implemented in {self.__class__.__name__}')
+
     def forward_single(self, x, reg_scale, offset_scale):
         if not self.windowed_input:
             windows = window_partition(x, self.patch_dim, channel_last=False)

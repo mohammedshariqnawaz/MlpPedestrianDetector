@@ -34,10 +34,11 @@ model = dict(
         norm_eval=False,
     ),
     neck=dict(
-        type='MLPFPN',
+        type='MLPFPN', 
         in_channels=[32, 64, 128, 256],
         out_channels=64,
         mixer_count=1,
+        start_stage=1
     ),
     bbox_head=dict(
         type='CSPMLPHead',
@@ -182,7 +183,7 @@ wandb = dict(
     init_kwargs=dict(
         project="MLPOD",
         entity="mlpthesis",
-        name="h2x2_neck_1_head_64c",
+        name="h2x2_neck_1_without_stage1_head_64c",
         config=dict(
             work_dirs="${work_dir}",
             total_step="${runner.max_epochs}",
@@ -195,7 +196,7 @@ total_epochs = 120
 device_ids = range(4)
 dist_params = dict(backend='nccl')
 log_level = 'INFO'
-work_dir = '/netscratch/nawaz/work_dirs/mlpod/__h2x2_neck_1_head_64c/'
+work_dir = '/netscratch/nawaz/work_dirs/mlpod/h2x2_neck_1_without_stage1_head_64c/'
 load_from = None
 # load_from = '/netscratch/hkhan/work_dirs/csp_hrnet_ext/epoch_34.pth'
 resume_from = None

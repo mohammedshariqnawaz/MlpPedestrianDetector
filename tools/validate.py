@@ -24,10 +24,8 @@ from pathlib import Path
 import numpy as np
 
 from prettytable import PrettyTable
-# from pthflops import count_ops
-from ptflops import get_model_complexity_info
-# from fvcore.nn import FlopCountAnalysis
-# from fvcore.nn import flop_count_table
+from torchvision.models import resnet18
+# from torchscope import scope
 
 def single_gpu_test(model, data_loader, show=False, save_img=False, save_img_dir=''):
     model.eval()
@@ -198,17 +196,8 @@ def main():
         model = build_detector(cfg.model, train_cfg=None, test_cfg=cfg.test_cfg)
         if args.count_params:
             count_parameters(model)
-        
-        # macs, params = get_model_complexity_info(model, (3, 2048, 1024), as_strings=True,
-        #                                    print_per_layer_stat=True, verbose=True)
-        # print('{:<30}  {:<8}'.format('Computational complexity: ', macs))
-        # print('{:<30}  {:<8}'.format('Number of parameters: ', params))
-        
-        # inp = torch.rand(1,3,224,224)
-        # flops = FlopCountAnalysis(model, inp)
-        # print("Flops",flops.total())
-        # print(flop_count_table(flops))
-        # count_ops(model, inp)
+        # print(model)
+        # scope(model, input_size=(3, 224, 224))
         
         fp16_cfg = cfg.get('fp16', None)
 
