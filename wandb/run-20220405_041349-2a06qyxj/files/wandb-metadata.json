@@ -1,0 +1,32 @@
+{
+    "os": "Linux-5.4.0-105-generic-x86_64-with-debian-buster-sid",
+    "python": "3.6.10",
+    "heartbeatAt": "2022-04-05T02:13:50.951905",
+    "startedAt": "2022-04-05T02:13:49.792125",
+    "docker": null,
+    "gpu": "NVIDIA RTX A6000",
+    "gpu_count": 2,
+    "cpu_count": 96,
+    "cuda": null,
+    "args": [
+        "--local_rank=0",
+        "configs/mlp/neckhead2x4_without_stage_1_2_3.py",
+        "--seed",
+        "7",
+        "--launcher",
+        "pytorch",
+        "--validate"
+    ],
+    "state": "running",
+    "program": "tools/train.py",
+    "codePath": "tools/train.py",
+    "git": {
+        "remote": "https://github.com/mohammedshariqnawaz/Pedestron.git",
+        "commit": "0aae203cc1e119be71b4fbc379390573624ba518"
+    },
+    "email": "mohammedshariqn@gmail.com",
+    "root": "/home/nawaz/F2DNet",
+    "host": "serv-9223",
+    "username": "nawaz",
+    "executable": "/opt/conda/bin/python"
+}

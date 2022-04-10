@@ -1,0 +1,33 @@
+wandb_version: 1
+
+_wandb:
+  desc: null
+  value:
+    cli_version: 0.12.11
+    framework: torch
+    is_jupyter_run: false
+    is_kaggle_kernel: false
+    python_version: 3.6.10
+    start_time: 1647882163
+    t:
+      1:
+      - 1
+      - 37
+      - 38
+      2:
+      - 1
+      - 37
+      - 38
+      3:
+      - 13
+      - 16
+      4: 3.6.10
+      5: 0.12.11
+      8:
+      - 5
+total_step:
+  desc: null
+  value: ${runner.max_epochs}
+work_dirs:
+  desc: null
+  value: ${work_dir}

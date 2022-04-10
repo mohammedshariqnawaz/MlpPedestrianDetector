@@ -1,0 +1,1 @@
+{"train/loss_cls": 0.22881558343768119, "train/loss_bbox": 0.013801358211785554, "train/loss_offset": 0.010015960577875375, "train/loss": 0.2526329009234905, "learning_rate": 6.666666666666667e-05, "momentum": 0.9, "_timestamp": 1649126062, "_runtime": 747, "_step": 250, "_wandb": {"runtime": 751}}

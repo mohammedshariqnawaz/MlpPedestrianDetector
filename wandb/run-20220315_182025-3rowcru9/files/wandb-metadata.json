@@ -1,0 +1,32 @@
+{
+    "os": "Linux-5.4.0-104-generic-x86_64-with-debian-buster-sid",
+    "python": "3.6.10",
+    "heartbeatAt": "2022-03-15T17:20:27.525890",
+    "startedAt": "2022-03-15T17:20:25.845160",
+    "docker": null,
+    "gpu": "NVIDIA GeForce RTX 3090",
+    "gpu_count": 2,
+    "cpu_count": 96,
+    "cuda": null,
+    "args": [
+        "--local_rank=0",
+        "configs/mlp/neckhead2x2.py",
+        "--seed",
+        "7",
+        "--launcher",
+        "pytorch",
+        "--validate"
+    ],
+    "state": "running",
+    "program": "tools/train.py",
+    "codePath": "tools/train.py",
+    "git": {
+        "remote": "https://github.com/AbdulHannanKhan/F2DNet.git",
+        "commit": "39c93c1ccd8b2d399feda64fdbb1d3dd185b8cf1"
+    },
+    "email": "mohammedshariqn@gmail.com",
+    "root": "/home/nawaz/F2DNet",
+    "host": "serv-9217",
+    "username": "nawaz",
+    "executable": "/opt/conda/bin/python"
+}

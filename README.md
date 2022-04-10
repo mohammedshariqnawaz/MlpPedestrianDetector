@@ -8,7 +8,21 @@
 
 F2DNet is a [Pedestron](https://github.com/hasanirtiza/Pedestron) based repository which implements a novel, two-staged detector i.e. Fast Focal Detection Network for pedestrian detection.
 
-<img title="Frankfurt" src="gifs/1.gif" width="400" /> <img title="Frankfurt" src="gifs/2.gif" width="400"/>
+[Pedestron](https://128.84.21.199/pdf/2003.08799.pdf) is a [MMdetection](https://github.com/open-mmlab/mmdetection) based repository, that focuses on the advancement of research on pedestrian detection. We provide a list of detectors, both general purpose and pedestrian specific to train and test. Moreover, we provide pre-trained models and benchmarking of several detectors on different pedestrian detection datasets. Additionally, we provide processed annotations and scripts to process the annotation of different pedestrian detection benchmarks. If you use Pedestron, please cite us (see at the end) and other respective sources.
+
+# :fire: **Updates** :fire:
+* 🧨 **We have realeased [PedesFormer - Transformer Based Pedestrian Detection](https://github.com/hasanirtiza/PedesFormer-SwinTransformer-For-Pedestrian-Detection) repo (particularly Swin Transformer) along with pre-trained models. Stay tune for the updates.** 🧨
+
+
+
+
+
+### YouTube demo
+* [Caltech](https://www.youtube.com/watch?v=cemN7JbgxWE&feature=youtu.be) and [EuroCity Persons](https://www.youtube.com/watch?v=ZFObRPa_yMM). Pre-Trained model available.
+
+### Leaderboards 
+* [CityPersons](https://github.com/cvgroup-njust/CityPersons)
+* [EuroCity Persons](https://eurocity-dataset.tudelft.nl/eval/benchmarks/detection)
 
 ### Installation
 Please refer to [base repository](https://github.com/hasanirtiza/Pedestron) for step-by-step installation. 
@@ -60,5 +74,16 @@ Please refer to base repository for dataset preparation.
   eprintclass = {cs.CV, I.2.10; I.4.8; I.5.4},
   eprint      = {http://arxiv.org/abs/2203.02331v1},
   url         = {http://arxiv.org/abs/2203.02331v1}
+}
+
+```
+
+[ArXiv2022](https://arxiv.org/pdf/2201.03176.pdf)
+```
+@article{hasan2022pedestrian,
+  title={Pedestrian Detection: Domain Generalization, CNNs, Transformers and Beyond},
+  author={Hasan, Irtiza and Liao, Shengcai and Li, Jinpeng and Akram, Saad Ullah and Shao, Ling},
+  journal={arXiv preprint arXiv:2201.03176},
+  year={2022}
 }
 ```
