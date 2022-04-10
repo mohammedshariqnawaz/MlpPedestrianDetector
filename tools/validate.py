@@ -23,7 +23,7 @@ from torch.utils.tensorboard import SummaryWriter
 from pathlib import Path
 import numpy as np
 
-from prettytable import PrettyTable
+# from prettytable import PrettyTable
 from torchvision.models import resnet18
 # from torchscope import scope
 
@@ -145,14 +145,14 @@ def parse_args():
     return args
 
 def count_parameters(model):
-    table = PrettyTable(["Modules", "Parameters"])
+    # table = PrettyTable(["Modules", "Parameters"])
     total_params = 0
     for name, parameter in model.named_parameters():
         if not parameter.requires_grad: continue
         params = parameter.numel()
-        table.add_row([name, params])
+        # table.add_row([name, params])
         total_params+=params
-    print(table)
+    # print(table)
     print(f"Total Trainable Params: {total_params}")
     return total_params
 
@@ -191,13 +191,14 @@ def main():
             workers_per_gpu=1,
             dist=distributed,
             shuffle=False)
-
+        
+        
         # build the model and load checkpoint
         model = build_detector(cfg.model, train_cfg=None, test_cfg=cfg.test_cfg)
+        # print(model)
         if args.count_params:
             count_parameters(model)
-        # print(model)
-        # scope(model, input_size=(3, 224, 224))
+
         
         fp16_cfg = cfg.get('fp16', None)
 

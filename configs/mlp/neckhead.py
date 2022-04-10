@@ -38,6 +38,8 @@ model = dict(
         in_channels=[32, 64, 128, 256],
         out_channels=64,
         mixer_count=1,
+        start_stage=0,
+        end_stage=4,
     ),
     bbox_head=dict(
         type='CSPMLPHead',
@@ -164,7 +166,7 @@ lr_config = dict(
     warmup_iters=250,
     warmup_ratio=1.0 / 3,
     gamma=0.3,
-    step=[80])
+    step=[120])
 
 checkpoint_config = dict(interval=1)
 evaluation = dict(interval=1, eval_hook='CocoDistEvalMRHook')
@@ -182,7 +184,7 @@ wandb = dict(
     init_kwargs=dict(
         project="MLPOD",
         entity="mlpthesis",
-        name="h2x2_neck_1_head_64c",
+        name="hrnet_hrfpn_cspmlphead_4_64c",
         config=dict(
             work_dirs="${work_dir}",
             total_step="${runner.max_epochs}",
@@ -195,7 +197,7 @@ total_epochs = 120
 device_ids = range(4)
 dist_params = dict(backend='nccl')
 log_level = 'INFO'
-work_dir = '/netscratch/hkhan/work_dirs/mlpod/h2x2_neck_1_head_64c/'
+work_dir = '/netscratch/hkhan/work_dirs/mlpod/fresh/hrnet_hrfpn_cspmlphead_4_64c/'
 load_from = None
 # load_from = '/netscratch/hkhan/work_dirs/csp_hrnet_ext/epoch_34.pth'
 resume_from = None
