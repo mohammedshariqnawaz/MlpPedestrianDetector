@@ -21,9 +21,10 @@ class MLPFPN(nn.Module):
                  out_channels,
                  patch_dim=8,
                  start_index=1,
-                 mixer_count=1,
                  start_stage=0,
-                 end_stage=4):
+                 end_stage=4,
+                 feat_channels=[8, 16, 128],
+                 mixer_count=1):
         super(MLPFPN, self).__init__()
         assert isinstance(in_channels, list)
         self.in_channels = in_channels
@@ -34,9 +35,15 @@ class MLPFPN(nn.Module):
         self.patch_dim = patch_dim
         self.start_stage = start_stage
         self.end_stage = end_stage
+        self.feat_channels = feat_channels
 
-        pc = int(np.sum([self.in_channels[i] * 2**(2*(self.num_ins-1 - i)) for i in range(self.num_ins)[self.start_stage:self.end_stage]]))
-        self.intpr = nn.Linear(pc, (self.patch_dim**2)*self.out_channels)
+        pc = int(np.sum([self.feat_channels[i] * 2**(2*(self.num_ins-1 - i)) for i in range(len(feat_channels))]))
+        self.intprL = nn.Linear(pc, (self.patch_dim**2)*self.out_channels)
+
+        self.intpr = nn.ModuleList()
+        for i in range(len(self.feat_channels)):
+            tokens = 2**(2*(self.num_ins-1 - i))
+            self.intpr.append(nn.Linear(self.in_channels[i] * tokens, self.feat_channels[i] * tokens))
 
         self.mixers = None
         if self.mixer_count > 0:
@@ -54,26 +61,15 @@ class MLPFPN(nn.Module):
         parts = []
         # print("NUM_ins",self.num_ins)
 
-        # print("INMPUTS", inputs[0].shape)
-
-        for i in range(self.num_ins)[self.start_stage:self.end_stage]:
-            # print("i",inputs[i].shape)
+        for i in range(len(self.feat_channels)):
             part = window_partition(inputs[i], 2**(self.num_ins-1 - i), channel_last=False)
-            # print("i++",part.shape)
-            # print("Asdasdss",part.shape)
-            parts.append(torch.flatten(part, -2))
-            
-            
-        
-        # print("OUT",out)
-        # for i in range(len(parts)):
-            # print("PARTS",parts[i].shape)
-        
+            part = torch.flatten(part, -2)
+            part = self.intpr[i](part)
+            parts.append(part)
+
         out = torch.cat(parts, dim=-1)
-        # print("OUT",out.shape)
-        
-        out = self.intpr(out)
-        # print("OUT_AFTER_INTERPOLATIOn",out.shape)
+        out = self.intprL(out)
+
         B, T, _ = out.shape
         outputs = out.view(B, T, self.patch_dim**2, self.out_channels)
 
