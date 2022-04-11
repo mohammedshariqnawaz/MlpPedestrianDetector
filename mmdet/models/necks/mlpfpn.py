@@ -24,7 +24,8 @@ class MLPFPN(nn.Module):
                  start_stage=0,
                  end_stage=4,
                  feat_channels=[8, 16, 128],
-                 mixer_count=1):
+                 mixer_count=1,
+                 mlp_hidden_dim_factor=2):
         super(MLPFPN, self).__init__()
         assert isinstance(in_channels, list)
         self.in_channels = in_channels
@@ -36,6 +37,7 @@ class MLPFPN(nn.Module):
         self.start_stage = start_stage
         self.end_stage = end_stage
         self.feat_channels = feat_channels
+        self.mlp_hidden_dim_factor = mlp_hidden_dim_factor
 
         pc = int(np.sum([self.feat_channels[i] * 2**(2*(self.num_ins-1 - i)) for i in range(len(feat_channels))]))
         self.intprL = nn.Linear(pc, (self.patch_dim**2)*self.out_channels)
@@ -48,7 +50,7 @@ class MLPFPN(nn.Module):
         self.mixers = None
         if self.mixer_count > 0:
             self.mixers = nn.Sequential(*[
-                MixerBlock(self.patch_dim**2, self.out_channels) for i in range(self.mixer_count)
+                MixerBlock(self.patch_dim**2, self.out_channels,self.mlp_hidden_dim_factor) for i in range(self.mixer_count)
             ])
 
     def init_weights(self):

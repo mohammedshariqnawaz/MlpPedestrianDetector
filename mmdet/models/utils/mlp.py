@@ -48,14 +48,14 @@ class MlpBlock(nn.Module):
 
 
 class MixerBlock(nn.Module):
-    def __init__(self, num_tokens, num_channels, use_ln=True):
+    def __init__(self, num_tokens, num_channels,mlp_hidden_dim_factor, use_ln=True):
         super(MixerBlock, self).__init__()
         self.use_ln = use_ln
         if use_ln:
             self.ln_token = nn.LayerNorm(num_channels)
             self.ln_channel = nn.LayerNorm(num_channels)
-        self.token_mix = MlpBlock(num_tokens, num_tokens * 2)
-        self.channel_mix = MlpBlock(num_channels, num_channels * 2)
+        self.token_mix = MlpBlock(num_tokens, num_tokens * mlp_hidden_dim_factor)
+        self.channel_mix = MlpBlock(num_channels, num_channels * mlp_hidden_dim_factor) 
 
     def forward(self, x):
         if self.use_ln:
