@@ -387,7 +387,7 @@ class reg_pos(nn.Module):
 class reg_hw_pos(nn.Module):
     def __init__(self):
         super(reg_hw_pos, self).__init__()
-        self.smoothl1 = nn.SmoothL1Loss(reduction='none')
+        self.smoothl1 = nn.L1Loss(reduction='none') #Changed to L1 Loss instead of SmoothL1
 
     def forward(self, h_pred, h_label):
         l1_loss = h_label[:, 2, :, :]*self.smoothl1(h_pred[:, 0, :, :]/(h_label[:, 0, :, :]+1e-10),
