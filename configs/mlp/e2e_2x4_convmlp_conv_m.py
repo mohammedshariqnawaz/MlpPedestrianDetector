@@ -1,51 +1,25 @@
 # model settings
-model = dict(
+model = dict( 
     type='CSP',
-    pretrained='open-mmlab://msra/hrnetv2_w32',
-    backbone=dict(
-        type='HRNet',
-        extra=dict(
-            stage1=dict(
-                num_modules=1,
-                num_branches=1,
-                block='BOTTLENECK',
-                num_blocks=(4,),
-                num_channels=(64,)),
-            stage2=dict(
-                num_modules=1,
-                num_branches=2,
-                block='BASIC',
-                num_blocks=(4, 4),
-                num_channels=(32, 64)),
-            stage3=dict(
-                num_modules=4,
-                num_branches=3,
-                block='BASIC',
-                num_blocks=(4, 4, 4),
-                num_channels=(32, 64, 128)),
-            stage4=dict(
-                num_modules=3,
-                num_branches=4,
-                block='BASIC',
-                num_blocks=(4, 4, 4, 4),
-                num_channels=(32, 64, 128, 256))
-        ),
-        # frozen_stages=-1,
-        norm_eval=False,
-    ),
+    pretrained="http://ix.cs.uoregon.edu/~alih/conv-mlp/checkpoints/convmlp_m_imagenet.pth",
+    backbone=dict(type='DetConvMLPMedium'),
     neck=dict(
-        type='HRFPN',
-        in_channels=[32, 64, 128, 256],
-        out_channels=768,
-        num_outs=1),
+        type='MLPFPN',
+        in_channels=[64, 128, 256, 512],
+        out_channels=32,
+        mixer_count=1,
+        linear_reduction=False,
+        feat_channels=[4, 16, 128, 1024]
+    ),
     bbox_head=dict(
-        type='CSPHead',
+        type='CSPMLPHead',
         num_classes=2,
-        in_channels=768,
+        in_channels=32,
+        windowed_input=True,
+        patch_dim=8,
         stacked_convs=1,
-        feat_channels=256,
+        feat_channels=32,
         strides=[4],
-        predict_width=True,
         loss_cls=dict(
             type='FocalLoss',
             use_sigmoid=True,
@@ -104,7 +78,7 @@ data = dict(
         type=dataset_type,
         ann_file='./datasets/CityPersons/train.json',
         img_prefix=data_root,
-        with_width=True,
+
         img_scale=(2048, 1024),
         img_norm_cfg=img_norm_cfg,
         small_box_to_ignore=False,
@@ -128,7 +102,6 @@ data = dict(
         flip_ratio=0,
         with_mask=False,
         with_crowd=False,
-        with_width=True,
         with_label=True),
     test=dict(
         type=dataset_type,
@@ -141,7 +114,6 @@ data = dict(
         with_mask=False,
         with_crowd=False,
         with_label=False,
-        with_width=True,
         test_mode=True))
 # optimizer
 # optimizer = dict(
@@ -164,7 +136,7 @@ lr_config = dict(
     warmup_iters=250,
     warmup_ratio=1.0 / 3,
     gamma=0.3,
-    step=[80])
+    step=[240])
 
 checkpoint_config = dict(interval=1)
 evaluation = dict(interval=1, eval_hook='CocoDistEvalMRHook')
@@ -180,9 +152,9 @@ log_config = dict(
 
 wandb = dict(
     init_kwargs=dict(
-        project="SS22Project",
+        project="MLPOD",
         entity="mlpthesis",
-        name="base_with_width",
+        name="e2e_2x4_conv_mlp_m_32c_1",
         config=dict(
             work_dirs="${work_dir}",
             total_step="${runner.max_epochs}",
@@ -195,7 +167,7 @@ total_epochs = 120
 device_ids = range(4)
 dist_params = dict(backend='nccl')
 log_level = 'INFO'
-work_dir = '/netscratch/nawaz/work_dirs/cp/base_width/'
+work_dir = '/netscratch/nawaz/work_dirs/mlpod/e2e_2x4_conv_mlp_m_32c_/'
 load_from = None
 # load_from = '/netscratch/hkhan/work_dirs/csp_hrnet_ext/epoch_34.pth'
 resume_from = None
